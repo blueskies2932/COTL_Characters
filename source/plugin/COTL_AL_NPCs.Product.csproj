@@ -1,0 +1,61 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>COTL_AL_NPCs</AssemblyName>
+    <RootNamespace>COTL_AL_NPCs</RootNamespace>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyMetadata Include="AI_Assisted_Creation" Value="This assembly was partially created with the assistance of Generative AI for code changes, refactoring, documentation, and release packaging." />
+    <AssemblyMetadata Include="AI_Model_Vendor" Value="OpenAI" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>..\..\..\..\profiles\Default\BepInEx\core\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\..\profiles\Default\BepInEx\core\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="COTL_API">
+      <HintPath>..\..\..\..\profiles\Default\BepInEx\plugins\xhayper-COTL_API\io.github.xhayper.COTL_API\COTL_API.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Sirenix.Serialization">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\Sirenix.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sirenix.OdinInspector.Attributes">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\Sirenix.OdinInspector.Attributes.dll</HintPath>
+    </Reference>
+    <Reference Include="Sirenix.Utilities">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\Sirenix.Utilities.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

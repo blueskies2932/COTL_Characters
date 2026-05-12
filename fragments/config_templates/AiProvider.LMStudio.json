@@ -1,0 +1,15 @@
+{
+  "providerType": "openai-compatible",
+  "apiKeyEnvVar": "",
+  "apiKeyFile": "",
+  "requiresApiKey": false,
+  "setupComplete": false,
+  "validatedProviderModel": false,
+  "baseUrl": "http://localhost:1234/v1",
+  "endpointPath": "/chat/completions",
+  "model": "",
+  "timeoutSeconds": 120,
+  "temperature": null,
+  "maxTokens": null,
+  "headers": {}
+}

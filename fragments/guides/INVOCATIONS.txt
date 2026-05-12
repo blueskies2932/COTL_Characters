@@ -1,0 +1,38 @@
+Invocations Guide
+=================
+
+Invocations are exact player-defined codes that the mod intercepts before the
+prompt is sent to the AI.
+
+Opening the Menu
+----------------
+
+- Pause the game.
+- Press F7.
+- Enter a code for any available invocation.
+- Save.
+
+Using an Invocation
+-------------------
+
+Type the exact saved code into the conversation command field for any Mod NPC.
+If it matches, the mod runs the invocation and sends a short receipt:
+
+- Invocation:successful
+- Invocation:failed
+
+The invocation name and code are not included in the receipt.
+
+Available Invocations
+---------------------
+
+- Fill cult faith to maximum.
+- Clear vanilla follower roles.
+
+Notes
+-----
+
+- Invocations work across Mod NPCs.
+- Codes are case-sensitive.
+- Leading and trailing spaces are ignored.
+- Do not use codes you might type by accident during normal conversation.

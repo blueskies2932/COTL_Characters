@@ -1,0 +1,47 @@
+Troubleshooting
+===============
+
+AI replies do not work
+----------------------
+
+- Confirm AiProvider.json is configured for the provider you want to use.
+- If the provider requires a key, confirm the environment variable or key file
+  named in AiProvider.json is available before launching the game.
+- To clear provider setup and start over, double-click
+  BepInEx/config/COTL_AL_NPCs/Reset_AI_Provider.cmd.
+- Confirm the sidecar files exist in:
+
+  BepInEx/plugins/COTL_AL_NPCs/sidecar/
+
+- Confirm .NET 10 Runtime is installed.
+- Check BepInEx/LogOutput.log for sidecar startup messages.
+
+The sidecar does not start
+--------------------------
+
+- Keep CotlAiNpcSidecar.exe, CotlAiNpcSidecar.dll, the .deps.json, and the
+  .runtimeconfig.json together in the sidecar folder.
+- If AutoStart is disabled, re-enable AI Sidecar.AutoStart in config.
+- If a custom Sidecar.ExecutablePath is set, clear it or point it to the
+  sidecar folder.
+
+Tournament status looks wrong
+-----------------------------
+
+- Use Refresh Statuses in the Tournament Ledger.
+- Confirm the follower is actually gone/dead, not temporarily busy, jailed,
+  on a rack, in a ritual, or otherwise unavailable for a short time.
+
+Clicks pass through an overlay
+------------------------------
+
+- This product build is intended to block background clicking for its main
+  overlays. If it happens, close and reopen the overlay and report which screen
+  and button caused it.
+
+Performance hitches
+-------------------
+
+- Keep Performance.VerboseLogging off during normal play.
+- Keep runtime tracing and diagnostic witness settings off unless actively
+  investigating a bug.

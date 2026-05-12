@@ -1,0 +1,46 @@
+Character Mode Guide
+====================
+
+Character Mode is for followers who act as in-world characters.
+
+What It Does
+------------
+
+- Lets the follower respond in character through the conversation UI.
+- Supports per-character awareness toggles.
+- Supports per-character Lore text.
+- Supports conversation transcript copying.
+- Does not issue automatic work orders.
+
+Character Awareness
+-------------------
+
+The awareness panel is shown with the conversation UI. Settings are per
+character, not global.
+
+Available awareness toggles include:
+
+- Personal Traits: includes the follower's current personal traits.
+- Cult About: includes the player-authored cult description.
+- Events: includes recent cult events.
+- Tournament: includes tournament matchup/champion context when available.
+- World State: includes broad cult state such as faith, hunger, and sanitation.
+- Long-Term Chat: includes saved conversation memory for this character.
+- Lore: includes this character's player-authored Lore text.
+
+Session conversation is included automatically for the current open conversation.
+Cult traits are always part of the current system context and are not controlled
+by the Personal Traits toggle.
+
+Lore
+----
+
+Use the Lore leaf on the right side of the conversation UI to write and save
+character-specific context. Lore is only sent to the AI when that character's
+Lore toggle is on.
+
+Copying Conversations
+---------------------
+
+Use the copy icon in the conversation UI to copy the visible conversation to the
+clipboard. The copied text includes the character name and transcript.

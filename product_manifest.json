@@ -1,0 +1,10 @@
+{
+  "name": "COTL_Characters",
+  "version_number": "0.1.0",
+  "website_url": "",
+  "description": "AI-driven follower conversations and tournament tools for Cult of the Lamb.",
+  "dependencies": [
+    "BepInEx-BepInExPack_CultOfTheLamb-5.4.2101",
+    "xhayper-COTL_API-0.3.3"
+  ]
+}

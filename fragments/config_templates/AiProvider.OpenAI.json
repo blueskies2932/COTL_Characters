@@ -1,0 +1,15 @@
+{
+  "providerType": "openai",
+  "apiKeyEnvVar": "OPENAI_API_KEY",
+  "apiKeyFile": "",
+  "requiresApiKey": true,
+  "setupComplete": false,
+  "validatedProviderModel": false,
+  "baseUrl": "",
+  "endpointPath": "/responses",
+  "model": "",
+  "timeoutSeconds": 120,
+  "temperature": null,
+  "maxTokens": null,
+  "headers": {}
+}

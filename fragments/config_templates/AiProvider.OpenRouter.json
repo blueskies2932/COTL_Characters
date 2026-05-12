@@ -1,0 +1,15 @@
+{
+  "providerType": "openai-compatible",
+  "apiKeyEnvVar": "OPENROUTER_API_KEY",
+  "apiKeyFile": "",
+  "requiresApiKey": true,
+  "setupComplete": false,
+  "validatedProviderModel": false,
+  "baseUrl": "https://openrouter.ai/api/v1",
+  "endpointPath": "/chat/completions",
+  "model": "",
+  "timeoutSeconds": 120,
+  "temperature": null,
+  "maxTokens": null,
+  "headers": {}
+}

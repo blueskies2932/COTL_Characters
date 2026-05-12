@@ -1,0 +1,38 @@
+COTL AI NPCs - Feature Overview
+===============================
+
+This character-only product build adds optional AI-backed follower
+conversations to Cult of the Lamb, plus the Tournament Ledger tools.
+
+Follower Modes
+--------------
+
+Vanilla:
+- The follower is left to the base game.
+- No AI conversation is attached.
+
+Character:
+- The follower can speak as a character through the conversation UI.
+- Character awareness can be adjusted per follower while that follower's
+  conversation panel is open.
+- Character Mode is for personality, lore, current events, and conversation.
+
+Other Systems
+-------------
+
+- Invocations: exact player-defined codes that trigger mod-side effects.
+- Tournament Ledger: a fight-pit tournament tracker with entrant status,
+  match results, champion archive, and current match overlay.
+- Internet Access: optional direct-speech web search support.
+- Cult About: player-authored cult context used by eligible AI turns.
+- Copy Transcript: copies the visible conversation transcript for sharing.
+
+Default Hotkeys
+---------------
+
+- F7 while paused: Invocations menu.
+- F8 while paused: Tournament Ledger.
+- F8 while unpaused: current tournament match overlay.
+- F9 while paused: Internet Access panel.
+
+The conversation panel appears from supported follower interaction flows.

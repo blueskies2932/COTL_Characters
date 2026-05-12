@@ -1,0 +1,40 @@
+# Build outputs
+bin/
+obj/
+build/
+package/
+dist/
+!release-assets/
+!release-assets/**
+
+# Local IDE/editor files
+.vs/
+.vscode/*
+!.vscode/settings.json
+*.user
+*.suo
+*.rsuser
+
+# Logs and diagnostics
+*.log
+*.binlog
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Secrets and local provider config
+OpenAI.txt
+*api*key*
+*apikey*
+*secret*
+*token*
+AiProvider.json
+AiProviderKey.txt
+BepInEx/config/
+
+# Local dependency caches
+packages/
+.nuget/

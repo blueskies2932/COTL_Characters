@@ -1,0 +1,15 @@
+{
+  "providerType": "anthropic",
+  "apiKeyEnvVar": "ANTHROPIC_API_KEY",
+  "apiKeyFile": "",
+  "requiresApiKey": true,
+  "setupComplete": false,
+  "validatedProviderModel": false,
+  "baseUrl": "https://api.anthropic.com/v1",
+  "endpointPath": "/messages",
+  "model": "",
+  "timeoutSeconds": 120,
+  "temperature": null,
+  "maxTokens": null,
+  "headers": {}
+}

@@ -1,0 +1,144 @@
+AI Provider Setup
+=================
+
+The mod does not include an AI provider account or API key. Each player chooses
+their own provider.
+
+First Launch Setup
+------------------
+
+On first launch, the mod creates:
+
+  BepInEx/config/COTL_AL_NPCs/
+
+If no provider key is configured, the game shows an AI Provider Setup prompt.
+Use that in-game panel first. It stays visible until setup is actually usable.
+
+You can also open the advanced file setup helper later by double-clicking:
+
+  BepInEx/config/COTL_AL_NPCs/Setup_AI_Provider.cmd
+
+The in-game setup panel includes provider presets, a key field, model discovery,
+and a real provider test. It does not ship with or auto-fill an API key.
+
+Most players should not need to know a model ID. Choose the provider preset,
+paste the key from that provider's account dashboard once, then click:
+
+  Find, Test & Save Setup
+
+The mod asks the selected provider for model names when possible, ranks likely
+chat/text models, tests them through the same packaged sidecar and provider
+adapter path that NPC conversations use, then saves the first one that works.
+This catches models that are listed by a provider but rejected for a specific
+project, endpoint, account permission, or request shape.
+
+Advanced/manual setup is still available. Use Fetch Models to see returned
+model names, choose or type one, then click Test Selected Model. Save is blocked
+until the selected provider/model passes that test.
+
+Provider setup is not considered complete until the model test succeeds. Older
+or manually edited configs without that validation will reopen the in-game setup
+panel so the selected model can be tested.
+
+Resetting Provider Setup
+------------------------
+
+To clear provider setup and start over later, double-click:
+
+  BepInEx/config/COTL_AL_NPCs/Reset_AI_Provider.cmd
+
+The reset tool clears the local provider config and local key file for this mod
+profile. It asks for confirmation first. After reset, launch the game or run
+Setup_AI_Provider.cmd again.
+
+You can also use the Reset button inside the in-game setup panel when it is
+visible.
+
+Provider Config File
+--------------------
+
+The sidecar looks for:
+
+  BepInEx/config/COTL_AL_NPCs/AiProvider.json
+
+The in-game setup panel writes that file for you. Manual templates are also
+included in:
+
+  config_templates/
+
+Supported First-Pass Provider Types
+-----------------------------------
+
+- openai
+- openai-compatible
+- anthropic
+- gemini
+- mock
+
+OpenAI-compatible is the flexible option for services that expose a
+/chat/completions-style endpoint, including some hosted routing services and
+local tools.
+
+Provider Presets
+----------------
+
+The setup panel includes presets for:
+
+- OpenAI
+- OpenRouter
+- LM Studio
+- Ollama Compatible
+- Anthropic Claude
+- Google Gemini
+- Mock
+
+OpenRouter, LM Studio, and Ollama Compatible use the OpenAI-compatible adapter.
+Anthropic Claude and Google Gemini use provider-specific adapters.
+
+Keys
+----
+
+The in-game setup panel asks for the key once and saves it to the local profile
+key file after a provider/model test succeeds:
+
+- BepInEx/config/COTL_AL_NPCs/AiProviderKey.txt
+
+If you use apiKeyFile, the file should contain only the key on a non-comment
+line. Do not share files containing API keys.
+
+Local Providers
+---------------
+
+For local providers such as LM Studio or an Ollama OpenAI-compatible bridge:
+
+- set requiresApiKey to false
+- set baseUrl to the local server URL
+- set model to the model name exposed by that local server
+
+Testing The Provider
+--------------------
+
+The sidecar includes a product-side provider test command:
+
+  CotlAiNpcSidecar.exe --root "<path to BepInEx/config/COTL_AL_NPCs/Saves/<save>/Sidecar>" --test-provider
+
+The test loads AiProvider.json using the same search rules as normal play.
+
+The test prints only whether the provider succeeded or failed, plus a short
+test response if one was returned. It does not print API keys.
+
+The setup panel writes the same config the sidecar uses during normal play.
+
+Notes
+-----
+
+- Provider configuration is product-side runtime configuration, not an NPC
+  prompt.
+- The provider name, API key, and endpoint are not intentionally shown to the
+  AI model.
+- Internet Access in game is separate. It controls whether direct speech turns
+  may use web search when the active AI provider adapter supports native search.
+  Native web search is wired for OpenAI, OpenRouter, Anthropic Claude, and
+  Google Gemini. Generic OpenAI-compatible local endpoints such as LM Studio and
+  local Ollama bridges do not expose a universal web-search tool, so the sidecar
+  will not advertise web search to those models.

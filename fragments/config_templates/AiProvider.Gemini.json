@@ -1,0 +1,15 @@
+{
+  "providerType": "gemini",
+  "apiKeyEnvVar": "GEMINI_API_KEY",
+  "apiKeyFile": "",
+  "requiresApiKey": true,
+  "setupComplete": false,
+  "validatedProviderModel": false,
+  "baseUrl": "https://generativelanguage.googleapis.com",
+  "endpointPath": "/v1beta/models/{model}:generateContent",
+  "model": "",
+  "timeoutSeconds": 120,
+  "temperature": null,
+  "maxTokens": null,
+  "headers": {}
+}

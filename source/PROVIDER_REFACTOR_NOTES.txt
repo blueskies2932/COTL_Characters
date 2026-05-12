@@ -1,0 +1,38 @@
+Product provider refactor notes
+
+Scope:
+- This source copy is product-only and is intentionally separate from the active development mod source.
+- The first implemented slice adds an IAiProvider seam to the product sidecar.
+
+Current behavior:
+- Existing OpenAI Responses API behavior is preserved through OpenAIProvider.
+- OpenAI-compatible, Anthropic Claude, Google Gemini, and Mock providers are
+  present as product-side adapter starting points.
+- The sidecar loads AiProvider.json from the config folder ancestry or from --provider-config.
+- Local OpenAI-compatible providers can be configured with requiresApiKey=false.
+- The sidecar supports --test-provider for a provider-neutral connection test.
+- The product package includes Configure_AI_Provider.cmd as a basic provider config/test UI.
+- Runtime request construction now produces normalized AiRequest objects. Each
+  selected provider adapter formats those requests for its own wire API.
+- Existing prompt construction and game behavior are not changed by this slice.
+
+Next intended slices:
+- Add product UI for provider type, base URL, API key, model, timeout, and test connection.
+- Harden provider-specific adapters against real hosted/local provider quirks
+  as they are tested.
+- Keep secrets user-owned, local, and never logged.
+
+Checked against the architecture brief and current provider docs:
+- OpenAI remains on the Responses API path.
+- OpenRouter, LM Studio, and Ollama-compatible paths use OpenAI-style
+  /chat/completions endpoints.
+- Anthropic Claude uses the Messages API path.
+- Google Gemini uses the generateContent API path.
+- Chat-completions responses are extracted through choices[0].message.content.
+
+Known remaining product work:
+- Streaming is still designed for later and is not enabled in the product settings tool.
+- The current settings tool avoids normal config secrets by using an environment variable by default, with optional separate key-file storage. It does not yet use encrypted OS credential storage.
+- Web-search support is provider-dependent. OpenAI uses Responses web_search;
+  OpenRouter uses its web plugin path; local OpenAI-compatible endpoints may
+  ignore or lack equivalent web-search behavior.

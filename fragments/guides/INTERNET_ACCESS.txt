@@ -1,0 +1,44 @@
+Internet Access Guide
+=====================
+
+Internet Access is optional and applies to direct speech turns.
+
+Opening the Panel
+-----------------
+
+- Pause the game.
+- Press F9.
+- Toggle Internet Access on or off.
+
+What It Affects
+---------------
+
+- Direct speech can use web search when Internet Access is on and the selected
+  AI provider adapter has native web-search support.
+- Character replies stay in the in-game speech style even when web search is
+  available.
+- Invocation receipts do not use web search.
+- Search sources are archived outside the in-game reply so the speech bubble
+  remains in character and uncluttered.
+
+Provider Support
+----------------
+
+Native web-search support is wired for:
+
+- OpenAI
+- OpenRouter through the OpenAI-compatible adapter
+- Anthropic Claude
+- Google Gemini
+
+Generic local OpenAI-compatible servers such as LM Studio and local Ollama
+bridges do not have a universal web-search tool. With those providers,
+Internet Access is ignored for direct speech until a separate search provider is
+added.
+
+When To Use It
+--------------
+
+Turn it on when you want richer character responses that can draw on outside
+information. Turn it off when you want responses limited to in-game context,
+saved lore, traits, and local mod context.

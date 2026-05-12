@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "package_name": "package",
+  "mod": {
+    "namespace": "blues",
+    "name": "COTL_Characters",
+    "description": "AI-driven follower conversations and tournament tools for Cult of the Lamb.",
+    "version_number": "0.1.0",
+    "dependencies": [
+      "BepInEx-BepInExPack_CultOfTheLamb-5.4.2101",
+      "xhayper-COTL_API-0.3.3"
+    ],
+    "website_url": "",
+    "authors": [
+      "Deamon_Blue"
+    ]
+  },
+  "build": {
+    "product_define": "PRODUCT_BUILD",
+    "plugin_project": "source/plugin/COTL_AL_NPCs.Product.csproj",
+    "plugin_output": "build/plugin/net472/COTL_AL_NPCs.dll",
+    "sidecar_project": "source/sidecar/CotlAiNpcSidecar.csproj",
+    "sidecar_output": "build/sidecar/net10.0"
+  },
+  "promoted_features": [
+    {
+      "id": "character_mode",
+      "name": "Character Mode",
+      "guide": "CHARACTER_MODE.txt"
+    },
+    {
+      "id": "invocations",
+      "name": "Invocations",
+      "guide": "INVOCATIONS.txt"
+    },
+    {
+      "id": "tournament_ledger",
+      "name": "Tournament Ledger",
+      "guide": "TOURNAMENT_LEDGER.txt"
+    },
+    {
+      "id": "internet_access",
+      "name": "Internet Access",
+      "guide": "INTERNET_ACCESS.txt"
+    },
+    {
+      "id": "ai_provider_settings",
+      "name": "AI Provider Settings",
+      "guide": "AI_PROVIDER_SETUP.txt",
+      "config_templates": [
+        "AiProvider.OpenAI.json",
+        "AiProvider.OpenRouter.json",
+        "AiProvider.LMStudio.json",
+        "AiProvider.OllamaCompatible.json",
+        "AiProvider.Anthropic.json",
+        "AiProvider.Gemini.json"
+      ],
+      "tools": [
+        "Configure_AI_Provider.cmd",
+        "tools/Configure_AI_Provider.ps1"
+      ]
+    },
+    {
+      "id": "troubleshooting",
+      "name": "Troubleshooting",
+      "guide": "TROUBLESHOOTING.txt"
+    }
+  ],
+  "always_include_guides": [
+    "FEATURES_OVERVIEW.txt"
+  ],
+  "excluded_product_terms": []
+}

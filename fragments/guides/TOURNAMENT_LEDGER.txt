@@ -1,0 +1,45 @@
+Tournament Ledger Guide
+=======================
+
+The Tournament Ledger tracks a fight-pit style tournament inside the game.
+
+Opening the Ledger
+------------------
+
+- Press F8 while the game is paused to open the full ledger.
+- Press F8 while unpaused to show or hide the current match overlay.
+
+Entrants
+--------
+
+- Add followers from the available follower list.
+- Selected followers are removed from the available list to prevent duplicates.
+- Clearing an entrant returns that follower to the available list.
+- Live/dead status is updated from game state where available.
+- Followers taken away or actually gone are treated as dead for tournament use.
+- Resurrected followers can return to alive status.
+
+Matches
+-------
+
+- Add Match creates a blank match.
+- Add 10 Follower Bracket Template creates the standard bracket layout.
+- Apply selected followers fills bracket slots from the current entrant list.
+- Roll fields are dice rolls. When both rolls are filled, high roll becomes
+  Winner and low roll becomes Bad Target.
+- If rolls are not filled, Winner and Bad Target can be chosen from the two
+  contestants in that match. Choosing one fills the other automatically.
+- Winners propagate into later bracket matches where appropriate.
+
+Archive
+-------
+
+- A tournament should only archive after the final match has a decided winner.
+- Archived champions are viewable in the ledger's archive/champions screen.
+- Archive entries include expandable tournament overview details.
+
+Current Events
+--------------
+
+When tournament awareness is enabled for a character, upcoming match details and
+recent champions can be included in AI context for a few in-game days.
