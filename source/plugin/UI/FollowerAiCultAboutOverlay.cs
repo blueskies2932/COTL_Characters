@@ -92,7 +92,10 @@ namespace COTL_AL_NPCs
                 fontSize = fontSize,
                 wordWrap = true,
                 padding = new RectOffset(12, 12, 10, 10),
-                normal = { textColor = Color.white }
+                normal = { textColor = Color.white },
+                focused = { textColor = Color.white },
+                hover = { textColor = Color.white },
+                active = { textColor = Color.white }
             };
             FollowerAiOverlayGui.ApplyBackground(textAreaStyle, FollowerAiOverlayGui.SolidTexture(new Color(0.02f, 0.02f, 0.018f, 0.94f)));
 
