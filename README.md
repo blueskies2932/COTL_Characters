@@ -9,7 +9,7 @@ This repo is prepared for GitHub distribution. Most players should install from 
 1. Install Cult of the Lamb.
 2. Install a modded profile with BepInEx and COTL_API separately.
 3. Open this repo's Releases page.
-4. Download `COTL_Characters-0.1.3-direct-install.zip`.
+4. Download `COTL_Characters-0.1.4-direct-install.zip`.
 5. Right-click the zip and choose Extract All.
 6. Open the extracted folder.
 7. Double-click `Install_COTL_Characters.cmd`.

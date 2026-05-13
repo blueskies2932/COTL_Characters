@@ -1,28 +1,54 @@
 # Releasing COTL Characters
 
-This folder is a GitHub-ready staging copy for `COTL_Characters`.
+This repository is the source of truth for public COTL Characters releases.
 
-## First GitHub Release
+## Everyday Fix Workflow
 
-1. Create a public GitHub repository named `COTL_Characters` under `blueskies2932`.
-2. Upload or commit the contents of this `github_repo` folder.
-3. Create a GitHub Release with tag `v0.1.0`.
-4. Use the contents of `release-assets/v0.1.0/GITHUB_RELEASE_NOTES_0.1.0.md` as the release notes.
-5. Attach these files to the release:
-   - `release-assets/v0.1.0/COTL_Characters-0.1.0-direct-install.zip`
-   - `release-assets/v0.1.0/COTL_Characters-0.1.0-direct-install.zip.sha256.txt`
+Use this flow for bug fixes after a version has already shipped:
 
-The release zip is the user-facing installer. Players should not need to clone the repo.
-
-## Regenerate Release Assets
-
-From the local COTL workspace root:
+1. Make the source change in `source/`.
+2. Add one bullet under `## Unreleased` in `CHANGELOG.md`.
+3. Build the changed project:
 
 ```powershell
-.\COTL_AL_NPCs\Character_only_product_build\tools\Package_GitHub_Release.ps1
+dotnet build source\plugin\COTL_AL_NPCs.Product.csproj /p:DefineConstants=PRODUCT_BUILD /p:OutputPath=..\..\build\plugin\net472\
+dotnet build source\sidecar\CotlAiNpcSidecar.csproj /p:DefineConstants=PRODUCT_BUILD /p:OutputPath=..\..\build\sidecar\net10.0\
 ```
 
-After regenerating, copy the new zip, checksum, and release notes into `release-assets/v<version>/`.
+4. If the game is closed, copy the fixed plugin DLL into the local test install:
+
+```powershell
+Copy-Item -LiteralPath .\build\plugin\net472\COTL_AL_NPCs.dll -Destination "C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\BepInEx\plugins\COTL_AL_NPCs\COTL_AL_NPCs.dll" -Force
+```
+
+5. Launch the game, reproduce the old behavior, and check the live diagnostics/logs.
+6. Commit the fix once it passes local testing.
+
+Do not edit generated release zips by hand. Rebuild packages from the scripts below.
+
+## Before A Public Update
+
+1. Pick the next version number.
+2. Move the `## Unreleased` bullets in `CHANGELOG.md` under the new version heading.
+3. Update plugin/product version metadata.
+4. Run all package scripts from this repo root:
+
+```powershell
+.\tools\Package_GitHub_Release.ps1
+.\tools\Package_Nexus.ps1
+.\tools\Package_Thunderstore.ps1
+```
+
+5. Verify generated files in `dist\` and `release-assets\v<version>\`.
+6. Upload the matching artifacts to GitHub, Nexus, and Thunderstore.
+7. Commit the source, docs, and release assets together.
+
+## Release Artifacts
+
+- GitHub direct install: `dist\COTL_Characters-<version>-direct-install.zip`
+- Nexus upload: `dist\COTL_Characters-<version>-nexus.zip`
+- Thunderstore upload: `dist\COTL_Characters-<version>.zip`
+- Long-term copies: `release-assets\v<version>\`
 
 ## Stable IDs
 

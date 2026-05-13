@@ -53,8 +53,8 @@ namespace COTL_AL_NPCs
                 return "Sanitation=unavailable; threshold=unknown";
 
             var percent = NormalizePercent(normalized, 1f);
-            var state = ClassifyLowHigh(percent, 35f, 70f, "clean", "strained", "hazardous");
-            return $"Sanitation={state}; gauge={percent:0}% dirty; thresholds=clean_below_35%, strained_35_to_69%, hazardous_70%_or_more";
+            var state = ClassifyLowHigh(percent, 35f, 70f, "hazardous", "strained", "clean");
+            return $"Sanitation={state}; gauge={percent:0}% clean; thresholds=hazardous_below_35%, strained_35_to_69%, clean_70%_or_more";
         }
 
         private static string BuildWeatherLine()

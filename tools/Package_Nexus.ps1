@@ -304,12 +304,7 @@ $changelog = @"
 
 ## $($mod.version_number)
 
-- Security hotfix: AI provider setup no longer stores pasted API keys in the mod manager profile.
-- Removed generated and packaged provider setup command/script files from the release.
-- Existing users should delete BepInEx/config/COTL_AL_NPCs/AiProviderKey.txt before sharing or syncing a profile.
-- Fixed the AI Cult About editor text readability while typing.
-- Removed an extra overlay blocker layer from the About editor.
-- Kept the About editor above the underlying game UI while open.
+- Fixed world-state sanitation context so a full in-game sanitation gauge is described as clean instead of hazardous/dirty.
 "@
 Write-Utf8NoBom (Join-Path $nexusRoot "CHANGELOG.md") ($changelog + [Environment]::NewLine)
 
@@ -318,14 +313,9 @@ $pageDescription = @"
 
 AI-powered Character Mode conversations for Cult of the Lamb followers.
 
-## Version $($mod.version_number) Hotfix
+## Version $($mod.version_number)
 
-- Security hotfix: AI provider setup no longer stores pasted API keys in the mod manager profile.
-- Removed generated and packaged provider setup command/script files from the release.
-- Existing users should delete BepInEx/config/COTL_AL_NPCs/AiProviderKey.txt before sharing or syncing a profile. Rotate the key if that profile was already shared.
-- Fixed the AI Cult About editor so typed text remains readable.
-- Removed an extra overlay blocker layer that could appear dark over the About editor.
-- Kept the About editor in front of the underlying game UI while open.
+- Fixed world-state sanitation context so a full in-game sanitation gauge is described as clean instead of hazardous/dirty.
 
 ## Requirements
 

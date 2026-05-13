@@ -1,5 +1,9 @@
 ﻿# Changelog
 
+## 0.1.4
+
+- Fixed world-state sanitation context so a full in-game sanitation gauge is described as clean instead of hazardous/dirty.
+
 ## 0.1.3
 
 - Security hotfix: AI provider setup no longer stores pasted API keys in the mod manager profile.
