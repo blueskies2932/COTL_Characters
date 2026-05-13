@@ -5,12 +5,12 @@
     "namespace": "blues",
     "name": "COTL_Characters",
     "description": "AI-driven follower conversations and tournament tools for Cult of the Lamb.",
-    "version_number": "0.1.0",
+    "version_number": "0.1.3",
     "dependencies": [
       "BepInEx-BepInExPack_CultOfTheLamb-5.4.2101",
       "xhayper-COTL_API-0.3.3"
     ],
-    "website_url": "",
+    "website_url": "https://github.com/blueskies2932/COTL_Characters",
     "authors": [
       "Deamon_Blue"
     ]
@@ -54,10 +54,6 @@
         "AiProvider.OllamaCompatible.json",
         "AiProvider.Anthropic.json",
         "AiProvider.Gemini.json"
-      ],
-      "tools": [
-        "Configure_AI_Provider.cmd",
-        "tools/Configure_AI_Provider.ps1"
       ]
     },
     {
@@ -69,5 +65,12 @@
   "always_include_guides": [
     "FEATURES_OVERVIEW.txt"
   ],
-  "excluded_product_terms": []
+  "excluded_product_terms": [
+    "Owner Mode",
+    "OwnerMode",
+    "owner_mode",
+    "owner-mode",
+    "OwnerModeTriggerPhrase",
+    "owner mode"
+  ]
 }

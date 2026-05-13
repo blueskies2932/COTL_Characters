@@ -13,13 +13,13 @@
 
   <ItemGroup>
     <Reference Include="BepInEx">
-      <HintPath>..\..\..\..\profiles\Default\BepInEx\core\BepInEx.dll</HintPath>
+      <HintPath>..\..\build\plugin\net472\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="0Harmony">
-      <HintPath>..\..\..\..\profiles\Default\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>..\..\build\plugin\net472\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="COTL_API">
-      <HintPath>..\..\..\..\profiles\Default\BepInEx\plugins\xhayper-COTL_API\io.github.xhayper.COTL_API\COTL_API.dll</HintPath>
+      <HintPath>..\..\build\plugin\net472\COTL_API.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Cult of the Lamb\Cult Of The Lamb_Data\Managed\Assembly-CSharp.dll</HintPath>

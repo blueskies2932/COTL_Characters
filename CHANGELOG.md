@@ -1,4 +1,13 @@
-# Changelog
+﻿# Changelog
+
+## 0.1.3
+
+- Security hotfix: AI provider setup no longer stores pasted API keys in the mod manager profile.
+- Removed generated and packaged provider setup command/script files from the release.
+- Existing users should delete `BepInEx/config/COTL_AL_NPCs/AiProviderKey.txt` before sharing or syncing a profile.
+- Fixed the AI Cult About editor text readability while typing.
+- Removed an extra overlay blocker layer from the About editor.
+- Kept the About editor above the underlying game UI while open.
 
 ## 0.1.0
 
@@ -10,3 +19,5 @@
 - Added user-configurable AI provider setup.
 - Added double-click Windows installer.
 - Added sidecar runtime packaging.
+
+

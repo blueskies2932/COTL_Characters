@@ -14,10 +14,6 @@ On first launch, the mod creates:
 If no provider key is configured, the game shows an AI Provider Setup prompt.
 Use that in-game panel first. It stays visible until setup is actually usable.
 
-You can also open the advanced file setup helper later by double-clicking:
-
-  BepInEx/config/COTL_AL_NPCs/Setup_AI_Provider.cmd
-
 The in-game setup panel includes provider presets, a key field, model discovery,
 and a real provider test. It does not ship with or auto-fill an API key.
 
@@ -43,16 +39,46 @@ panel so the selected model can be tested.
 Resetting Provider Setup
 ------------------------
 
-To clear provider setup and start over later, double-click:
+To clear provider setup and start over later, use the Reset button inside the
+in-game setup panel. Reset clears the local provider config and removes any
+legacy profile key file.
 
-  BepInEx/config/COTL_AL_NPCs/Reset_AI_Provider.cmd
+Manual API Key Reset
+--------------------
 
-The reset tool clears the local provider config and local key file for this mod
-profile. It asks for confirmation first. After reset, launch the game or run
-Setup_AI_Provider.cmd again.
+If the setup panel is not visible because the current setup is already valid,
+you can reset manually:
 
-You can also use the Reset button inside the in-game setup panel when it is
-visible.
+1. Close the game.
+2. Open the modded profile folder.
+3. Open:
+
+   BepInEx/config/COTL_AL_NPCs/
+
+4. Delete these files if they exist:
+
+   - AiProvider.json
+   - AiProviderKey.txt
+   - LAST_PROVIDER_SETUP_TEST.txt
+
+5. If the key was saved by the hotfix, update or delete the matching Windows
+   user environment variable:
+
+   - OPENAI_API_KEY
+   - OPENROUTER_API_KEY
+   - ANTHROPIC_API_KEY
+   - GEMINI_API_KEY
+   - AI_PROVIDER_API_KEY
+
+6. Relaunch the game. The AI Provider Setup panel should appear again.
+
+For Thunderstore Mod Manager or r2modman, the profile folder is usually under:
+
+  Thunderstore Mod Manager/DataFolder/CultOfTheLamb/profiles/<ProfileName>/
+
+or:
+
+  r2modmanPlus-local/CultOfTheLamb/profiles/<ProfileName>/
 
 Provider Config File
 --------------------
@@ -98,13 +124,13 @@ Anthropic Claude and Google Gemini use provider-specific adapters.
 Keys
 ----
 
-The in-game setup panel asks for the key once and saves it to the local profile
-key file after a provider/model test succeeds:
+The in-game setup panel asks for the key once and saves it to the provider's
+Windows user environment variable after a provider/model test succeeds. The mod
+no longer writes API keys into files inside the mod manager profile.
 
-- BepInEx/config/COTL_AL_NPCs/AiProviderKey.txt
-
-If you use apiKeyFile, the file should contain only the key on a non-comment
-line. Do not share files containing API keys.
+If you previously used AiProviderKey.txt, move or rotate that key, then delete
+the file before sharing or syncing a profile. Do not share files containing API
+keys.
 
 Local Providers
 ---------------

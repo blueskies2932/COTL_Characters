@@ -45,9 +45,22 @@ function Assert-StrictUtf8TextFile([string]$path) {
 
 function Assert-NoForbiddenEntries([string]$root) {
     $forbiddenNames = @("bin", "obj", ".git", ".vs", ".idea", "__pycache__")
+    $forbiddenDependencyFiles = @(
+        "COTL_API.dll",
+        "BepInEx.dll",
+        "0Harmony.dll",
+        "Assembly-CSharp.dll",
+        "UnityEngine.dll",
+        "UnityEngine.CoreModule.dll",
+        "Newtonsoft.Json.dll",
+        "Sirenix.Serialization.dll"
+    )
     foreach ($entry in Get-ChildItem -LiteralPath $root -Recurse -Force) {
         if ($forbiddenNames -contains $entry.Name) {
             throw "Forbidden development entry included in GitHub release package: $($entry.FullName)"
+        }
+        if ($forbiddenDependencyFiles -contains $entry.Name) {
+            throw "Do not bundle external dependency/game/framework assembly in GitHub release package: $($entry.FullName)"
         }
         if ($entry.Name -match "\.(env|user|suo|tmp|cache)$") {
             throw "Forbidden temp/secret-like file included in GitHub release package: $($entry.FullName)"
@@ -148,7 +161,7 @@ COTL Characters adds AI-powered Character Mode conversations to Cult of the Lamb
 ## Quick Install
 
 1. Install Cult of the Lamb.
-2. Install a modded profile with BepInEx and COTL_API.
+2. Install a modded profile with BepInEx and COTL_API separately.
 3. Download COTL_Characters-$($mod.version_number)-direct-install.zip from GitHub Releases.
 4. Right-click the zip and choose Extract All.
 5. Open the extracted folder.
@@ -156,7 +169,7 @@ COTL Characters adds AI-powered Character Mode conversations to Cult of the Lamb
 7. Choose your Thunderstore or r2modman profile folder when asked.
 8. Start the game from that same modded profile.
 
-No API keys are included. The first launch will guide you through AI provider setup in game.
+No API keys are included. BepInEx, COTL_API, and game files are not included. The first launch will guide you through AI provider setup in game.
 
 ## What It Adds
 
@@ -180,8 +193,8 @@ No API keys are included. The first launch will guide you through AI provider se
 
 - Windows.
 - Cult of the Lamb.
-- BepInExPack CultOfTheLamb 5.4.2101.
-- COTL_API 0.3.3.
+- BepInExPack CultOfTheLamb 5.4.2101, installed separately.
+- COTL_API 0.3.3, installed separately.
 - .NET 10 runtime for the included sidecar process.
 - An AI provider key or local AI endpoint, unless you only use local providers that do not require a key.
 
@@ -195,7 +208,22 @@ Manual configuration is also possible at:
 
 BepInEx/config/COTL_AL_NPCs/AiProvider.json
 
-Never share files containing your API keys.
+This hotfix no longer stores pasted provider keys in the mod manager profile. If you used an older release and have BepInEx/config/COTL_AL_NPCs/AiProviderKey.txt, delete that file before sharing or syncing a profile. Rotate the provider key if that profile was already shared.
+
+## Reset or Change API Key
+
+Use the Reset button in the in-game AI Provider Setup panel when it is visible.
+
+Manual reset:
+
+1. Close the game.
+2. Open your modded profile folder.
+3. Open BepInEx/config/COTL_AL_NPCs/.
+4. Delete AiProvider.json, AiProviderKey.txt, and LAST_PROVIDER_SETUP_TEST.txt if they exist.
+5. Update or delete the matching Windows user environment variable: OPENAI_API_KEY, OPENROUTER_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, or AI_PROVIDER_API_KEY.
+6. Relaunch the game. The AI Provider Setup panel should appear again.
+
+Thunderstore/r2modman profiles are usually under Thunderstore Mod Manager/DataFolder/CultOfTheLamb/profiles/<ProfileName>/ or r2modmanPlus-local/CultOfTheLamb/profiles/<ProfileName>/.
 
 ## Troubleshooting
 
@@ -203,7 +231,7 @@ Never share files containing your API keys.
 - If the installer cannot find a profile automatically, choose the folder that contains the BepInEx folder.
 - If AI replies do not work, finish the in-game AI Provider Setup prompt.
 - If sidecar errors appear, install the .NET 10 runtime and confirm BepInEx/plugins/COTL_AL_NPCs/sidecar exists.
-- If COTL_API is missing, install it into the same modded profile.
+- If COTL_API is missing, install it separately into the same modded profile.
 
 ## AI-Assisted Creation Disclosure
 
@@ -222,10 +250,11 @@ $install = @"
 
 This is the friendly path:
 
-1. Extract the release zip.
-2. Double-click Install_COTL_Characters.cmd.
-3. Pick your modded Cult of the Lamb profile folder.
-4. Launch the game from that same profile.
+1. Install BepInEx and COTL_API separately in your Cult of the Lamb modded profile.
+2. Extract the release zip.
+3. Double-click Install_COTL_Characters.cmd.
+4. Pick your modded Cult of the Lamb profile folder.
+5. Launch the game from that same profile.
 
 ## Picking the right folder
 
@@ -253,7 +282,7 @@ If the installer does not work:
 
 ## After install
 
-Use the in-game AI Provider Setup prompt. No provider keys are included in this release.
+Use the in-game AI Provider Setup prompt. No provider keys, BepInEx files, COTL_API files, or game files are included in this release.
 "@
 Write-Utf8NoBom (Join-Path $releaseRoot "INSTALL.md") ($install + [Environment]::NewLine)
 
@@ -262,14 +291,12 @@ $changelog = @"
 
 ## $($mod.version_number)
 
-- Initial direct GitHub release.
-- Added Character Mode follower conversations.
-- Added per-character awareness and reply length controls.
-- Added Tournament Ledger support.
-- Added Invocations.
-- Added user-configurable AI provider setup.
-- Added double-click Windows installer.
-- Added sidecar runtime packaging.
+- Security hotfix: AI provider setup no longer stores pasted API keys in the mod manager profile.
+- Removed generated and packaged provider setup command/script files from the release.
+- Existing users should delete BepInEx/config/COTL_AL_NPCs/AiProviderKey.txt before sharing or syncing a profile.
+- Fixed the AI Cult About editor text readability while typing.
+- Removed an extra overlay blocker layer from the About editor.
+- Kept the About editor above the underlying game UI while open.
 "@
 Write-Utf8NoBom (Join-Path $releaseRoot "CHANGELOG.md") ($changelog + [Environment]::NewLine)
 
@@ -458,7 +485,19 @@ Write-Utf8NoBom $hashPath ($hashText + [Environment]::NewLine)
 $releaseNotes = @"
 # COTL Characters $($mod.version_number)
 
-Direct GitHub install release for Cult of the Lamb.
+Hotfix release for Cult of the Lamb.
+
+## Fixed
+
+- AI provider setup no longer stores pasted API keys in the mod manager profile.
+- Generated and packaged provider setup command/script files were removed from the release.
+- Fixed the AI Cult About editor so the input text is readable while typing.
+- Removed the extra full-screen blocker layer from the About overlay that could appear as a dark layer over the editor.
+- Kept the About editor on top of the game UI while it is open.
+
+## Action Recommended
+
+If you used an older release and have BepInEx/config/COTL_AL_NPCs/AiProviderKey.txt, delete that file before sharing or syncing a profile. Rotate the provider key if that profile was already shared.
 
 ## Download
 
@@ -472,7 +511,7 @@ Optional checksum:
 
 ## Install
 
-1. Install BepInExPack CultOfTheLamb 5.4.2101 and COTL_API 0.3.3 in your modded Cult of the Lamb profile.
+1. Install BepInExPack CultOfTheLamb 5.4.2101 and COTL_API 0.3.3 separately in your modded Cult of the Lamb profile.
 2. Download $zipName from this release.
 3. Right-click the zip and choose Extract All.
 4. Open the extracted folder.
@@ -483,6 +522,7 @@ Optional checksum:
 ## Notes
 
 - No AI provider keys are included.
+- Pasted provider keys are saved to the user's Windows environment variable instead of a profile-local key file.
 - The in-game AI Provider Setup prompt guides provider/model setup.
 - .NET 10 runtime is required for the included sidecar process.
 - This release includes an AI-assisted creation disclosure in README.md and assembly metadata.

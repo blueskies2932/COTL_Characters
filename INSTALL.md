@@ -1,4 +1,4 @@
-# COTL Characters Install Guide
+﻿# COTL Characters Install Guide
 
 This is the friendly path:
 
@@ -35,3 +35,17 @@ If the installer does not work:
 ## After install
 
 Use the in-game AI Provider Setup prompt. No provider keys, BepInEx files, COTL_API files, or game files are included in this release.
+
+## Reset or Change API Key
+
+Use the Reset button in the in-game AI Provider Setup panel when it is visible.
+
+Manual reset:
+
+1. Close the game.
+2. Open your modded profile folder.
+3. Open `BepInEx/config/COTL_AL_NPCs/`.
+4. Delete `AiProvider.json`, `AiProviderKey.txt`, and `LAST_PROVIDER_SETUP_TEST.txt` if they exist.
+5. Update or delete the matching Windows user environment variable: `OPENAI_API_KEY`, `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, or `AI_PROVIDER_API_KEY`.
+6. Relaunch the game.
+

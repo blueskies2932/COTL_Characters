@@ -47,12 +47,19 @@ Install
    - Existing configs that have not passed this validation will reopen setup.
    - Relaunch the game if the sidecar was already running.
 
-   To reset provider setup later, double-click:
+   To reset provider setup later, use the Reset button in the in-game setup
+   panel. The in-game setup can test the exact provider/model path.
 
-   BepInEx/config/COTL_AL_NPCs/Reset_AI_Provider.cmd
+   Manual API key reset:
 
-   The generated Setup_AI_Provider.cmd is an advanced file setup helper. The
-   in-game setup is preferred because it can test the exact provider/model path.
+   - Close the game.
+   - Open BepInEx/config/COTL_AL_NPCs/ in the modded profile.
+   - Delete AiProvider.json, AiProviderKey.txt, and
+     LAST_PROVIDER_SETUP_TEST.txt if they exist.
+   - Update or delete the matching Windows user environment variable:
+     OPENAI_API_KEY, OPENROUTER_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, or
+     AI_PROVIDER_API_KEY.
+   - Relaunch the game to show the AI Provider Setup panel again.
 
    Manual option:
 
@@ -63,10 +70,11 @@ Install
    The first launch creates a default AiProvider.json. You can edit it directly
    or copy one of the files from config_templates/ and rename it to AiProvider.json.
 
-   For paid providers, set the provider's environment variable or provide an
-   apiKeyFile in AiProvider.json. For local OpenAI-compatible servers, set
-   requiresApiKey to false and configure baseUrl/model. Manual configs still
-   need to pass in-game model validation before setup is considered complete.
+   For paid providers, set the provider's Windows user environment variable.
+   Do not store API keys in files inside a shared mod manager profile. For
+   local OpenAI-compatible servers, set requiresApiKey to false and configure
+   baseUrl/model. Manual configs still need to pass in-game model validation
+   before setup is considered complete.
 
    Do not share files containing API keys.
 
@@ -81,8 +89,6 @@ Included Runtime Files
 - BepInEx/plugins/COTL_AL_NPCs/sidecar/CotlAiNpcSidecar.deps.json
 - BepInEx/plugins/COTL_AL_NPCs/sidecar/CotlAiNpcSidecar.runtimeconfig.json
 - manifest.json
-- Configure_AI_Provider.cmd
-- tools/Configure_AI_Provider.ps1
 - config_templates/*.json
 - guides/*.txt
 

@@ -5,10 +5,10 @@ AI replies do not work
 ----------------------
 
 - Confirm AiProvider.json is configured for the provider you want to use.
-- If the provider requires a key, confirm the environment variable or key file
-  named in AiProvider.json is available before launching the game.
-- To clear provider setup and start over, double-click
-  BepInEx/config/COTL_AL_NPCs/Reset_AI_Provider.cmd.
+- If the provider requires a key, confirm the environment variable named in
+  AiProvider.json is available before launching the game.
+- To clear provider setup and start over, use the Reset button in the in-game
+  AI Provider Setup panel.
 - Confirm the sidecar files exist in:
 
   BepInEx/plugins/COTL_AL_NPCs/sidecar/

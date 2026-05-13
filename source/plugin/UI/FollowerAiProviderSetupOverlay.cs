@@ -28,8 +28,8 @@ namespace COTL_AL_NPCs
         private static int selectedPreset;
         private static FollowerAiProviderSetupDraft draft = new FollowerAiProviderSetupDraft();
         private static string apiKey = string.Empty;
-        private static bool saveKeyFile = true;
-        private static bool saveEnvironmentVariable;
+        private static bool saveKeyFile;
+        private static bool saveEnvironmentVariable = true;
         private static string status = "Most players: choose a provider, paste the provider key once, then click Find, Test & Save Setup.";
         private static string[] fetchedModels = new string[0];
         private static int selectedFetchedModel = -1;
@@ -97,8 +97,8 @@ namespace COTL_AL_NPCs
             draft = FollowerAiProviderSetup.GetDraft();
             selectedPreset = FindPresetIndex(draft.ProviderType);
             apiKey = string.Empty;
-            saveKeyFile = true;
-            saveEnvironmentVariable = false;
+            saveKeyFile = false;
+            saveEnvironmentVariable = true;
             fetchedModels = new string[0];
             selectedFetchedModel = -1;
             initialized = true;
@@ -126,8 +126,8 @@ namespace COTL_AL_NPCs
         {
             selectedPreset = index;
             ClearFetchedModels();
-            saveKeyFile = true;
-            saveEnvironmentVariable = false;
+            saveKeyFile = false;
+            saveEnvironmentVariable = true;
             switch (index)
             {
                 case 0:
@@ -265,7 +265,7 @@ namespace COTL_AL_NPCs
                     lastValidatedApiKey = string.Empty;
                     validatedSetupSignature = string.Empty;
                 }
-                GUILayout.Label("Paste the key here once. After a model test succeeds, the mod saves it to this Thunderstore profile's local key file. Keys are never shown to the AI model.", labelStyle);
+                GUILayout.Label($"Paste the key here once. After a model test succeeds, the mod saves it to your Windows user environment variable ({draft.ApiKeyEnvVar}) and does not write it into the mod manager profile.", labelStyle);
             }
             else
             {
@@ -306,8 +306,6 @@ namespace COTL_AL_NPCs
                 Save();
             if (GUILayout.Button("Reset", buttonStyle, GUILayout.Width(160f), GUILayout.Height(58f)))
                 Reset();
-            if (GUILayout.Button("Advanced File Setup", buttonStyle, GUILayout.Width(260f), GUILayout.Height(58f)))
-                FollowerAiProviderSetup.OpenSetupTool();
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
 

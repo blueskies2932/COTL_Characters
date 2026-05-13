@@ -1,9 +1,6 @@
 using BepInEx;
 using BepInEx.Configuration;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace COTL_AL_NPCs
 {
@@ -19,13 +16,10 @@ namespace COTL_AL_NPCs
             if (!string.IsNullOrWhiteSpace(configKey))
                 return configKey;
 
-            return ReadOpenAIKeyFile();
+            return string.Empty;
         }
 
-        internal static string GetOpenAIConfigurationSource()
-        {
-            return FollowerAiProviderSetup.GetStatusLine();
-        }
+        internal static string GetOpenAIConfigurationSource() => FollowerAiProviderSetup.GetStatusLine();
 
         private void BindConfig()
         {
@@ -57,48 +51,5 @@ namespace COTL_AL_NPCs
             ConversationWindowOpacity = Config.Bind("AI Conversation Window", "WindowOpacity", 0.72f, "Opacity for the AI follower conversation window background. Text remains fully opaque.");
         }
 
-        private static string ReadOpenAIKeyFile()
-        {
-            var keyFile = GetOpenAIKeyFilePath();
-            if (string.IsNullOrWhiteSpace(keyFile))
-                return string.Empty;
-
-            try
-            {
-                var firstLine = File.ReadLines(keyFile)
-                    .Select(line => line.Trim())
-                    .FirstOrDefault(line => !string.IsNullOrWhiteSpace(line) && !line.StartsWith("#"));
-
-                return firstLine ?? string.Empty;
-            }
-            catch (Exception ex)
-            {
-                Log?.LogWarning($"OpenAI key file could not be read: {ex.Message}");
-                return string.Empty;
-            }
-        }
-
-        private static string GetOpenAIKeyFilePath()
-        {
-            foreach (var path in GetOpenAIKeyFileCandidates())
-            {
-                try
-                {
-                    if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
-                        return path;
-                }
-                catch
-                {
-                    // Keep probing; a bad candidate should not block other locations.
-                }
-            }
-
-            return string.Empty;
-        }
-
-        private static IEnumerable<string> GetOpenAIKeyFileCandidates()
-        {
-            yield return FollowerAiProviderSetup.ProviderKeyPath;
-        }
     }
 }

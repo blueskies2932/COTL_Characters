@@ -1,4 +1,4 @@
-# COTL Characters
+﻿# COTL Characters
 
 COTL Characters adds AI-powered Character Mode conversations to Cult of the Lamb followers.
 
@@ -9,7 +9,7 @@ This repo is prepared for GitHub distribution. Most players should install from 
 1. Install Cult of the Lamb.
 2. Install a modded profile with BepInEx and COTL_API separately.
 3. Open this repo's Releases page.
-4. Download `COTL_Characters-0.1.0-direct-install.zip`.
+4. Download `COTL_Characters-0.1.3-direct-install.zip`.
 5. Right-click the zip and choose Extract All.
 6. Open the extracted folder.
 7. Double-click `Install_COTL_Characters.cmd`.
@@ -57,7 +57,22 @@ Manual configuration is also possible at:
 BepInEx/config/COTL_AL_NPCs/AiProvider.json
 ```
 
-Never share files containing your API keys.
+This hotfix no longer stores pasted provider keys in the mod manager profile. If you used an older release and have `BepInEx/config/COTL_AL_NPCs/AiProviderKey.txt`, delete that file before sharing or syncing a profile. Rotate the provider key if that profile was already shared.
+
+## Reset or Change API Key
+
+Use the Reset button in the in-game AI Provider Setup panel when it is visible.
+
+Manual reset:
+
+1. Close the game.
+2. Open your modded profile folder.
+3. Open `BepInEx/config/COTL_AL_NPCs/`.
+4. Delete `AiProvider.json`, `AiProviderKey.txt`, and `LAST_PROVIDER_SETUP_TEST.txt` if they exist.
+5. Update or delete the matching Windows user environment variable: `OPENAI_API_KEY`, `OPENROUTER_API_KEY`, `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`, or `AI_PROVIDER_API_KEY`.
+6. Relaunch the game. The AI Provider Setup panel should appear again.
+
+Thunderstore/r2modman profiles are usually under `Thunderstore Mod Manager/DataFolder/CultOfTheLamb/profiles/<ProfileName>/` or `r2modmanPlus-local/CultOfTheLamb/profiles/<ProfileName>/`.
 
 ## Build From Source
 
@@ -90,3 +105,5 @@ This project is released under the MIT License. Cult of the Lamb, BepInEx, COTL_
 ## Credits
 
 - Deamon_Blue
+
+

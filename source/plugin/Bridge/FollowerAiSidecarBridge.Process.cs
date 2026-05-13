@@ -129,7 +129,7 @@ namespace COTL_AL_NPCs
                 try
                 {
                     var trimmedKey = (apiKey ?? string.Empty).Trim();
-                    var apiKeyFile = FollowerAiProviderSetup.ProviderKeyPath;
+                    var apiKeyFile = string.Empty;
                     if (!string.IsNullOrWhiteSpace(trimmedKey))
                     {
                         File.WriteAllText(keyPath, trimmedKey);
