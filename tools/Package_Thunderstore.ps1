@@ -150,8 +150,13 @@ function Assert-ZipRoot([string]$zipPath) {
                 throw "Zip root is missing required file: $required"
             }
         }
-        if (-not ($entryNames | Where-Object { $_ -eq "plugins/COTL_AL_NPCs/COTL_AL_NPCs.dll" })) {
-            throw "Zip is missing plugins/COTL_AL_NPCs/COTL_AL_NPCs.dll"
+        if (-not ($entryNames | Where-Object { $_ -eq "BepInEx/plugins/COTL_AL_NPCs/COTL_AL_NPCs.dll" })) {
+            throw "Zip is missing BepInEx/plugins/COTL_AL_NPCs/COTL_AL_NPCs.dll"
+        }
+        foreach ($forbidden in @("tools/", "guides/", "config_templates/", "Configure_AI_Provider.cmd")) {
+            if ($entryNames | Where-Object { $_ -like "$forbidden*" }) {
+                throw "Zip contains Thunderstore-unsafe or obsolete path: $forbidden"
+            }
         }
         if ($entryNames | Where-Object { $_ -like "thunderstore/*" -or $_ -like "dist/*" }) {
             throw "Zip contains an extra parent output folder."
@@ -179,10 +184,17 @@ if (-not $SkipBuild) {
 Reset-DirectoryInsideProduct $thunderstoreRoot
 
 Copy-RequiredTree $packageRoot $thunderstoreRoot
-if (Test-Path -LiteralPath (Join-Path $thunderstoreRoot "BepInEx")) {
-    New-Item -ItemType Directory -Force -Path (Join-Path $thunderstoreRoot "plugins") | Out-Null
-    Copy-Item -Path (Join-Path $thunderstoreRoot "BepInEx\plugins\*") -Destination (Join-Path $thunderstoreRoot "plugins") -Recurse -Force
-    Remove-Item -LiteralPath (Join-Path $thunderstoreRoot "BepInEx") -Recurse -Force
+
+foreach ($removePath in @(
+    (Join-Path $thunderstoreRoot "README_SETUP.txt"),
+    (Join-Path $thunderstoreRoot "PACKAGE_CONTENTS.txt"),
+    (Join-Path $thunderstoreRoot "guides"),
+    (Join-Path $thunderstoreRoot "config_templates"),
+    (Join-Path $thunderstoreRoot "Configure_AI_Provider.cmd"),
+    (Join-Path $thunderstoreRoot "tools"))) {
+    if (Test-Path -LiteralPath $removePath) {
+        Remove-Item -LiteralPath $removePath -Recurse -Force
+    }
 }
 
 $mod = $manifest.mod
@@ -218,7 +230,7 @@ Give your Cult of the Lamb followers configurable AI-powered character conversat
 
 ## Installation
 
-Install through Thunderstore Mod Manager or r2modman. The package places the plugin under plugins/COTL_AL_NPCs/ in the package, which the mod manager installs into the profile's BepInEx plugins folder.
+Install through Thunderstore Mod Manager or r2modman. The package places the plugin under BepInEx/plugins/COTL_AL_NPCs/ so the mod manager installs it into the profile's BepInEx plugins folder.
 
 ## Controls
 
@@ -237,7 +249,9 @@ Manual configuration uses:
 
 BepInEx/config/COTL_AL_NPCs/AiProvider.json
 
-Config templates are included in config_templates/. For paid providers, use your own provider key or a local key file. For local OpenAI-compatible servers, set requiresApiKey to false and configure the local base URL and model.
+This hotfix no longer stores pasted provider keys in the mod manager profile. If you used an older release and have BepInEx/config/COTL_AL_NPCs/AiProviderKey.txt, delete that file before sharing or syncing a profile. Rotate the provider key if that profile was already shared.
+
+To reset or change provider setup manually: close the game, open BepInEx/config/COTL_AL_NPCs/ in the modded profile, delete AiProvider.json, AiProviderKey.txt, and LAST_PROVIDER_SETUP_TEST.txt if present, then update or delete the matching Windows user environment variable such as OPENAI_API_KEY, OPENROUTER_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, or AI_PROVIDER_API_KEY.
 
 ## AI Provider Setup
 
@@ -270,8 +284,6 @@ The sidecar runtime is included in plugins/COTL_AL_NPCs/sidecar/ and is used for
 - Check that AI provider settings are valid.
 - Never paste someone else's API key.
 
-More detailed guides are included in the guides/ folder.
-
 ## AI-Assisted Creation Disclosure
 
 This mod and Thunderstore package were partially created with the assistance of Generative AI for code changes, refactoring, documentation, and release packaging.
@@ -289,7 +301,10 @@ $changelog = @"
 
 ## $($mod.version_number)
 
-- Initial character-only Thunderstore release.
+- Security hotfix: AI provider setup no longer stores pasted API keys in the mod manager profile.
+- Removed generated and packaged provider setup command/script files from the release.
+- Existing users should delete BepInEx/config/COTL_AL_NPCs/AiProviderKey.txt before sharing or syncing a profile.
+- Initial character-only Thunderstore release candidate.
 - Added Character Mode follower conversations.
 - Added per-character awareness and reply length controls.
 - Added Tournament Ledger support.
@@ -305,12 +320,11 @@ Assert-FileExists (Join-Path $thunderstoreRoot "manifest.json")
 Assert-FileExists (Join-Path $thunderstoreRoot "README.md")
 Assert-FileExists (Join-Path $thunderstoreRoot "CHANGELOG.md")
 Assert-FileExists (Join-Path $thunderstoreRoot "icon.png")
-Assert-FileExists (Join-Path $thunderstoreRoot "plugins\COTL_AL_NPCs\COTL_AL_NPCs.dll")
-Assert-FileExists (Join-Path $thunderstoreRoot "plugins\COTL_AL_NPCs\sidecar\CotlAiNpcSidecar.exe")
-Assert-FileExists (Join-Path $thunderstoreRoot "plugins\COTL_AL_NPCs\sidecar\CotlAiNpcSidecar.dll")
+Assert-FileExists (Join-Path $thunderstoreRoot "BepInEx\plugins\COTL_AL_NPCs\COTL_AL_NPCs.dll")
+Assert-FileExists (Join-Path $thunderstoreRoot "BepInEx\plugins\COTL_AL_NPCs\sidecar\CotlAiNpcSidecar.exe")
+Assert-FileExists (Join-Path $thunderstoreRoot "BepInEx\plugins\COTL_AL_NPCs\sidecar\CotlAiNpcSidecar.dll")
 Assert-StrictUtf8TextFile (Join-Path $thunderstoreRoot "README.md")
 Assert-StrictUtf8TextFile (Join-Path $thunderstoreRoot "CHANGELOG.md")
-Assert-StrictUtf8TextFile (Join-Path $thunderstoreRoot "README_SETUP.txt")
 Assert-IconPng256 (Join-Path $thunderstoreRoot "icon.png")
 Assert-NoForbiddenEntries $thunderstoreRoot
 Assert-NoSecretText $thunderstoreRoot
@@ -336,5 +350,11 @@ $items = Get-ChildItem -LiteralPath $thunderstoreRoot -Force
 Compress-Archive -Path $items.FullName -DestinationPath $zipPath -CompressionLevel Optimal
 Assert-ZipRoot $zipPath
 
+$hash = Get-FileHash -LiteralPath $zipPath -Algorithm SHA256
+$hashText = "$($hash.Hash.ToLowerInvariant())  $zipName"
+$hashPath = Join-Path $distRoot "$zipName.sha256.txt"
+Write-Utf8NoBom $hashPath ($hashText + [Environment]::NewLine)
+
 Write-Host "Thunderstore package folder: $thunderstoreRoot"
 Write-Host "Thunderstore zip: $zipPath"
+Write-Host "SHA256: $hashPath"
