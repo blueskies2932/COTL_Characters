@@ -1,5 +1,9 @@
 ﻿# Changelog
 
+## 0.1.5
+
+- Fixed AI Provider Setup model validation so the pasted setup key is the key used during tests, instead of allowing an existing Windows environment variable to override it.
+
 ## 0.1.4
 
 - Fixed world-state sanitation context so a full in-game sanitation gauge is described as clean instead of hazardous/dirty.

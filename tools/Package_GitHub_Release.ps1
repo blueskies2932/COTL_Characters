@@ -291,7 +291,7 @@ $changelog = @"
 
 ## $($mod.version_number)
 
-- Fixed world-state sanitation context so a full in-game sanitation gauge is described as clean instead of hazardous/dirty.
+- Fixed AI Provider Setup model validation so the pasted setup key is the key used during tests, instead of allowing an existing Windows environment variable to override it.
 "@
 Write-Utf8NoBom (Join-Path $releaseRoot "CHANGELOG.md") ($changelog + [Environment]::NewLine)
 
@@ -484,7 +484,7 @@ Bugfix release for Cult of the Lamb.
 
 ## Fixed
 
-- Fixed world-state sanitation context so a full in-game sanitation gauge is described as clean instead of hazardous/dirty.
+- Fixed AI Provider Setup model validation so the pasted setup key is the key used during tests, instead of allowing an existing Windows environment variable to override it.
 
 ## Download
 

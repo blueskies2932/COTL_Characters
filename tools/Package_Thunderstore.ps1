@@ -301,6 +301,7 @@ $changelog = @"
 
 ## $($mod.version_number)
 
+- Fixed AI Provider Setup model validation so the pasted setup key is the key used during tests, instead of allowing an existing Windows environment variable to override it.
 - Security hotfix: AI provider setup no longer stores pasted API keys in the mod manager profile.
 - Removed generated and packaged provider setup command/script files from the release.
 - Existing users should delete BepInEx/config/COTL_AL_NPCs/AiProviderKey.txt before sharing or syncing a profile.

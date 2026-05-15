@@ -2,6 +2,14 @@ internal static partial class Program
 {
     private static string ResolveProviderApiKey(string root, string? explicitKeyFile, AiProviderConfig config, string providerType)
     {
+        var configuredKeyFile = config.ApiKeyFile;
+        if (!string.IsNullOrWhiteSpace(explicitKeyFile) || !string.IsNullOrWhiteSpace(configuredKeyFile))
+        {
+            var explicitKey = ReadProviderKeyCandidates(root, explicitKeyFile, configuredKeyFile);
+            if (!string.IsNullOrWhiteSpace(explicitKey))
+                return explicitKey;
+        }
+
         var envName = !string.IsNullOrWhiteSpace(config.ApiKeyEnvVar)
             ? config.ApiKeyEnvVar
             : DefaultProviderApiKeyEnvVar(providerType);
@@ -9,7 +17,12 @@ internal static partial class Program
         if (!string.IsNullOrWhiteSpace(env))
             return env.Trim();
 
-        foreach (var path in EnumerateKeyCandidates(root, explicitKeyFile, config.ApiKeyFile))
+        return string.Empty;
+    }
+
+    private static string ReadProviderKeyCandidates(string root, string? explicitKeyFile, string? configuredKeyFile)
+    {
+        foreach (var path in EnumerateKeyCandidates(root, explicitKeyFile, configuredKeyFile))
         {
             try
             {
