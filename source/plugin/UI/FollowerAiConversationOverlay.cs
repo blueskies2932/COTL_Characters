@@ -160,15 +160,14 @@ namespace COTL_AL_NPCs
             GUILayout.BeginVertical(GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
             HandleKeyboardSendShortcut();
             HandleKeyboardScrollShortcut();
+            HandleKeyboardCloseShortcut();
 
             var fontSize = GetFontSize();
             DrawCharacterAwarenessSettings();
-            var textAreaHeight = Mathf.Max(140f, fontSize * 5.4f);
-            var buttonHeight = Mathf.Max(72f, fontSize * 2.2f);
-            var awarenessHeight = FollowerAIManager.GetMode(speakerID) == FollowerAiMode.Character
-                ? Mathf.Max(98f, fontSize * 2.6f)
-                : 0f;
-            var transcriptHeight = Mathf.Max(180f, windowRect.height - textAreaHeight - buttonHeight - awarenessHeight - 130f);
+            var textAreaHeight = Mathf.Clamp(fontSize * 3.6f, 82f, windowRect.height * 0.32f);
+            var buttonHeight = Mathf.Clamp(fontSize * 1.65f, 44f, 78f);
+            var awarenessHeight = GetCharacterAwarenessHeight();
+            var transcriptHeight = Mathf.Max(80f, windowRect.height - textAreaHeight - buttonHeight - awarenessHeight - 104f);
             transcriptScroll = GUILayout.BeginScrollView(transcriptScroll, GUILayout.Height(transcriptHeight), GUILayout.ExpandWidth(true));
             GUILayout.Label(transcript, transcriptStyle, GUILayout.ExpandWidth(true));
             GUILayout.EndScrollView();
@@ -189,6 +188,8 @@ namespace COTL_AL_NPCs
             if (GUILayout.Button(new GUIContent(copyIconTexture, "Copy transcript"), iconButtonStyle, GUILayout.Width(Mathf.Max(78f, fontSize * 1.55f)), GUILayout.Height(buttonHeight)))
                 CopyTranscriptToClipboard();
             GUI.enabled = true;
+            if (GUILayout.Button("Close", buttonStyle, GUILayout.Width(Mathf.Max(150f, fontSize * 3.1f)), GUILayout.Height(buttonHeight)))
+                CloseTextWindowForNativeInteraction();
             if (Time.realtimeSinceStartup < transcriptCopiedUntilRealtime)
                 GUILayout.Label("Copied.", commandLabelStyle, GUILayout.Width(Mathf.Max(110f, fontSize * 2.7f)));
             GUILayout.EndHorizontal();
@@ -585,6 +586,19 @@ namespace COTL_AL_NPCs
             }
         }
 
+        private static void HandleKeyboardCloseShortcut()
+        {
+            var ev = Event.current;
+            if (ev == null || ev.type != EventType.KeyDown)
+                return;
+
+            if (ev.keyCode != KeyCode.Escape)
+                return;
+
+            CloseTextWindowForNativeInteraction();
+            ev.Use();
+        }
+
         private static void HandleContinuousScrollInput()
         {
             if (!isOpen)
@@ -733,7 +747,14 @@ namespace COTL_AL_NPCs
 
         private static int GetFontSize()
         {
-            return Math.Max(36, Math.Min(76, AICharacterPlugin.ConversationFontSize?.Value ?? 52));
+            var fontSize = FollowerAiOverlayGui.GetScaledFontSize(16, 76);
+            if (windowRect.width > 0f && windowRect.height > 0f)
+            {
+                var windowScale = Mathf.Min(windowRect.width / 1180f, windowRect.height / 780f);
+                fontSize = Mathf.RoundToInt(fontSize * Mathf.Clamp(windowScale, 0.55f, 1f));
+            }
+
+            return Mathf.Clamp(fontSize, 16, 76);
         }
 
         private static float GetWindowOpacity()

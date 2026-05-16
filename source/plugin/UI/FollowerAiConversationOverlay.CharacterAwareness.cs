@@ -28,24 +28,141 @@ namespace COTL_AL_NPCs
             var settings = FollowerAiCharacterModeSettings.Get(speakerID);
             GUILayout.BeginVertical(awarenessBoxStyle, GUILayout.ExpandWidth(true));
             GUILayout.Label("Character Awareness", commandLabelStyle);
-            GUILayout.BeginHorizontal();
             var changed = false;
-            changed |= DrawAwarenessToggle("Traits", ref settings.PersonalTraits);
-            changed |= DrawAwarenessToggle("Cult About", ref settings.CultAbout);
-            changed |= DrawAwarenessToggle("Events", ref settings.CurrentEvents);
-            changed |= DrawAwarenessToggle("Tournament", ref settings.TournamentDetails);
-            changed |= DrawAwarenessToggle("World State", ref settings.WorldState);
-            changed |= DrawAwarenessToggle("Lore", ref settings.Lore);
-            GUILayout.EndHorizontal();
-            GUILayout.BeginHorizontal();
-            changed |= DrawAwarenessToggle("Long-Term Chat", ref settings.LongTermConversationHistory);
-            changed |= DrawReplyLengthMenu(settings);
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
+
+            var row = BeginAwarenessWrapRow();
+            changed |= DrawWrappedAwarenessToggle("Traits", ref settings.PersonalTraits, ref row);
+            changed |= DrawWrappedAwarenessToggle("Cult About", ref settings.CultAbout, ref row);
+            changed |= DrawWrappedAwarenessToggle("Events", ref settings.CurrentEvents, ref row);
+            changed |= DrawWrappedAwarenessToggle("Tournament", ref settings.TournamentDetails, ref row);
+            changed |= DrawWrappedAwarenessToggle("World State", ref settings.WorldState, ref row);
+            changed |= DrawWrappedAwarenessToggle("Lore", ref settings.Lore, ref row);
+            changed |= DrawWrappedAwarenessToggle("Long-Term", ref settings.LongTermConversationHistory, ref row);
+            changed |= DrawWrappedReplyLengthMenu(settings, ref row);
+            EndAwarenessWrapRow();
             GUILayout.EndVertical();
 
             if (changed)
                 FollowerAiCharacterModeSettings.Save(speakerID, settings);
+        }
+
+        private struct AwarenessWrapRow
+        {
+            public float UsedWidth;
+            public float AvailableWidth;
+        }
+
+        private static AwarenessWrapRow BeginAwarenessWrapRow()
+        {
+            GUILayout.BeginHorizontal();
+            return new AwarenessWrapRow
+            {
+                UsedWidth = 0f,
+                AvailableWidth = GetAwarenessWrapAvailableWidth()
+            };
+        }
+
+        private static void EndAwarenessWrapRow()
+        {
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+        }
+
+        private static void WrapAwarenessRowIfNeeded(float nextWidth, ref AwarenessWrapRow row)
+        {
+            if (row.UsedWidth <= 0f || row.UsedWidth + nextWidth <= row.AvailableWidth)
+                return;
+
+            EndAwarenessWrapRow();
+            row = BeginAwarenessWrapRow();
+        }
+
+        private static bool DrawWrappedAwarenessToggle(string label, ref bool value, ref AwarenessWrapRow row)
+        {
+            var width = GetAwarenessToggleWidth(label);
+            WrapAwarenessRowIfNeeded(width, ref row);
+            row.UsedWidth += width;
+            return DrawAwarenessToggle(label, ref value);
+        }
+
+        private static bool DrawWrappedReplyLengthMenu(FollowerAiCharacterAwarenessSettings settings, ref AwarenessWrapRow row)
+        {
+            var width = GetReplyLengthMenuWidth();
+            WrapAwarenessRowIfNeeded(width, ref row);
+            row.UsedWidth += width;
+            return DrawReplyLengthMenu(settings);
+        }
+
+        private static float GetCharacterAwarenessHeight()
+        {
+            if (FollowerAIManager.GetMode(speakerID) != FollowerAiMode.Character)
+                return 0f;
+
+            var fontSize = GetFontSize();
+            var titleHeight = Math.Max(28f, fontSize * 0.95f);
+            var rowHeight = Math.Max(28f, fontSize * 0.86f);
+            var padding = 24f;
+            return titleHeight + GetCharacterAwarenessRowCount() * rowHeight + padding;
+        }
+
+        private static int GetCharacterAwarenessRowCount()
+        {
+            var availableWidth = GetAwarenessWrapAvailableWidth();
+            var rows = 1;
+            var usedWidth = 0f;
+            var widths = new[]
+            {
+                GetAwarenessToggleWidth("Traits"),
+                GetAwarenessToggleWidth("Cult About"),
+                GetAwarenessToggleWidth("Events"),
+                GetAwarenessToggleWidth("Tournament"),
+                GetAwarenessToggleWidth("World State"),
+                GetAwarenessToggleWidth("Lore"),
+                GetAwarenessToggleWidth("Long-Term"),
+                GetReplyLengthMenuWidth()
+            };
+
+            foreach (var width in widths)
+            {
+                if (usedWidth > 0f && usedWidth + width > availableWidth)
+                {
+                    rows++;
+                    usedWidth = 0f;
+                }
+
+                usedWidth += width;
+            }
+
+            return rows;
+        }
+
+        private static float GetAwarenessWrapAvailableWidth()
+        {
+            return Math.Max(220f, windowRect.width - 76f);
+        }
+
+        private static float GetAwarenessToggleWidth(string label)
+        {
+            var fontSize = GetFontSize();
+            var boxSize = Math.Max(18f, fontSize * 0.66f);
+            var labelWidth = awarenessToggleLabelStyle?.CalcSize(new GUIContent(label)).x ?? label.Length * fontSize * 0.55f;
+            return boxSize + labelWidth + Math.Max(18f, fontSize * 0.44f);
+        }
+
+        private static float GetReplyLengthMenuWidth()
+        {
+            var fontSize = GetFontSize();
+            var width = awarenessToggleLabelStyle?.CalcSize(new GUIContent("Reply Length")).x ?? fontSize * 5f;
+            width += GetReplyLengthOptionWidth("Short");
+            width += GetReplyLengthOptionWidth("Medium");
+            width += GetReplyLengthOptionWidth("Long");
+            return width + Math.Max(28f, fontSize * 0.72f);
+        }
+
+        private static float GetReplyLengthOptionWidth(string label)
+        {
+            var fontSize = GetFontSize();
+            return Math.Max(fontSize * 2.45f, label.Length * fontSize * 0.78f);
         }
 
         private static void DrawCharacterLoreLeafTab()
@@ -124,7 +241,7 @@ namespace COTL_AL_NPCs
         private static bool DrawAwarenessToggle(string label, ref bool value)
         {
             var before = value;
-            var boxSize = Math.Max(30f, GetFontSize() * 0.72f);
+            var boxSize = Math.Max(18f, GetFontSize() * 0.66f);
             GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
             if (GUILayout.Button(string.Empty, value ? awarenessToggleOnStyle : awarenessToggleOffStyle, GUILayout.Width(boxSize), GUILayout.Height(boxSize)))
                 value = !value;
@@ -140,7 +257,7 @@ namespace COTL_AL_NPCs
                 return false;
 
             var before = settings.ReplyLength;
-            var height = Math.Max(30f, GetFontSize() * 0.72f);
+            var height = Math.Max(22f, GetFontSize() * 0.72f);
             GUILayout.BeginHorizontal(GUILayout.ExpandWidth(false));
             GUILayout.Label("Reply Length", awarenessToggleLabelStyle, GUILayout.Height(height), GUILayout.ExpandWidth(false));
             DrawReplyLengthOption(settings, FollowerAiReplyLength.Short, height);
@@ -154,7 +271,7 @@ namespace COTL_AL_NPCs
         {
             var selected = settings.ReplyLength == length;
             var label = length.ToString();
-            var width = Math.Max(96f, GetFontSize() * 2.1f);
+            var width = GetReplyLengthOptionWidth(label);
             if (GUILayout.Button(label, selected ? awarenessLengthSelectedStyle : awarenessLengthOptionStyle, GUILayout.Width(width), GUILayout.Height(height)))
                 settings.ReplyLength = length;
         }
@@ -185,10 +302,10 @@ namespace COTL_AL_NPCs
 
             awarenessToggleLabelStyle = new GUIStyle(GUI.skin.button)
             {
-                fontSize = Math.Max(18, fontSize - 10),
+                fontSize = Math.Max(14, fontSize - 7),
                 alignment = TextAnchor.MiddleLeft,
-                padding = new RectOffset(4, 12, 0, 0),
-                margin = new RectOffset(0, 16, 4, 4)
+                padding = new RectOffset(4, 8, 0, 0),
+                margin = new RectOffset(0, 10, 3, 3)
             };
             awarenessToggleLabelStyle.normal.textColor = new Color(0.98f, 0.94f, 0.82f);
             awarenessToggleLabelStyle.hover.textColor = new Color(1f, 1f, 0.88f);
@@ -196,8 +313,8 @@ namespace COTL_AL_NPCs
             awarenessLengthOptionStyle = new GUIStyle(awarenessToggleLabelStyle)
             {
                 alignment = TextAnchor.MiddleCenter,
-                margin = new RectOffset(0, 6, 4, 4),
-                padding = new RectOffset(8, 8, 0, 0)
+                margin = new RectOffset(0, 5, 3, 3),
+                padding = new RectOffset(6, 6, 0, 0)
             };
 
             awarenessLengthSelectedStyle = new GUIStyle(awarenessLengthOptionStyle);

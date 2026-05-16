@@ -63,6 +63,7 @@ namespace COTL_AL_NPCs
             if (!visible || !IsPauseScreenOpen())
                 return;
 
+            HandleKeyboardCloseShortcut();
             EnsureLoaded();
             EnsureStyles();
             EnsureWindowRect();
@@ -206,7 +207,7 @@ namespace COTL_AL_NPCs
 
         private static int GetFontSize()
         {
-            return Mathf.Clamp(AICharacterPlugin.ConversationFontSize?.Value ?? 52, 28, 72);
+            return FollowerAiOverlayGui.GetScaledFontSize(20, 72);
         }
 
         private static void EnsureWindowRect()
@@ -238,6 +239,19 @@ namespace COTL_AL_NPCs
         {
             status = message ?? string.Empty;
             statusUntilRealtime = Time.realtimeSinceStartup + 4f;
+        }
+
+        private static void HandleKeyboardCloseShortcut()
+        {
+            var ev = Event.current;
+            if (ev == null || ev.type != EventType.KeyDown || ev.keyCode != KeyCode.Escape)
+                return;
+
+            Save();
+            visible = false;
+            FollowerAiOverlayInputBlocker.Hide(InputBlockerOwner);
+            SetStatus("Invocations menu closed.");
+            ev.Use();
         }
     }
 }

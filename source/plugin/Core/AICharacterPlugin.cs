@@ -6,7 +6,7 @@ using Lamb.UI;
 
 namespace COTL_AL_NPCs
 {
-    [BepInPlugin("io.github.blueskies2932.COTL_Characters", "COTL Characters", "0.1.5")]
+    [BepInPlugin("io.github.blueskies2932.COTL_Characters", "COTL Characters", "0.1.6")]
     [BepInDependency("io.github.xhayper.COTL_API")]
     public partial class AICharacterPlugin : BaseUnityPlugin
     {

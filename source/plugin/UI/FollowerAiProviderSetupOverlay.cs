@@ -199,31 +199,33 @@ namespace COTL_AL_NPCs
 
         private static void DrawWindow(int id)
         {
+            var fontSize = FollowerAiOverlayGui.GetScaledFontSize(16, 24);
+            var buttonHeight = Mathf.Max(44f, fontSize * 2.35f);
             var labelStyle = new GUIStyle(GUI.skin.label)
             {
-                fontSize = 24,
+                fontSize = fontSize,
                 wordWrap = true
             };
             labelStyle.normal.textColor = Color.white;
 
             var titleStyle = new GUIStyle(labelStyle)
             {
-                fontSize = 32,
+                fontSize = Mathf.Max(fontSize + 6, Mathf.RoundToInt(fontSize * 1.32f)),
                 fontStyle = FontStyle.Bold
             };
 
             var fieldStyle = new GUIStyle(GUI.skin.textField)
             {
-                fontSize = 24
+                fontSize = fontSize
             };
 
             var buttonStyle = new GUIStyle(GUI.skin.button)
             {
-                fontSize = 25,
+                fontSize = fontSize,
                 fontStyle = FontStyle.Bold
             };
 
-            var statusStyle = BuildStatusStyle();
+            var statusStyle = BuildStatusStyle(fontSize);
 
             GUILayout.BeginVertical(GUILayout.ExpandHeight(true));
             GUILayout.Space(10f);
@@ -234,7 +236,7 @@ namespace COTL_AL_NPCs
             scroll = GUILayout.BeginScrollView(scroll, GUILayout.ExpandHeight(true));
 
             GUILayout.Label("Provider", labelStyle);
-            var newPreset = GUILayout.SelectionGrid(selectedPreset, PresetNames, 4, buttonStyle, GUILayout.Height(92f));
+            var newPreset = GUILayout.SelectionGrid(selectedPreset, PresetNames, Screen.width < 1000 ? 2 : 4, buttonStyle, GUILayout.Height(Screen.width < 1000 ? buttonHeight * 2f : buttonHeight * 1.7f));
             if (newPreset != selectedPreset)
                 ApplyPreset(newPreset);
 
@@ -246,7 +248,7 @@ namespace COTL_AL_NPCs
                 DrawTextField("Base URL", ref draft.BaseUrl, fieldStyle, labelStyle);
                 DrawTextField("Endpoint path", ref draft.EndpointPath, fieldStyle, labelStyle);
                 DrawTextField("API key environment variable name", ref draft.ApiKeyEnvVar, fieldStyle, labelStyle);
-                draft.RequiresApiKey = GUILayout.Toggle(draft.RequiresApiKey, "Custom provider requires an API key", labelStyle, GUILayout.Height(36f));
+                draft.RequiresApiKey = GUILayout.Toggle(draft.RequiresApiKey, "Custom provider requires an API key", labelStyle, GUILayout.Height(Mathf.Max(32f, fontSize * 1.5f)));
             }
             else
             {
@@ -258,7 +260,7 @@ namespace COTL_AL_NPCs
             {
                 GUILayout.Space(10f);
                 GUILayout.Label("API key", labelStyle);
-                var newApiKey = GUILayout.PasswordField(apiKey ?? string.Empty, '*', fieldStyle, GUILayout.Height(42f));
+                var newApiKey = GUILayout.PasswordField(apiKey ?? string.Empty, '*', fieldStyle, GUILayout.Height(Mathf.Max(36f, fontSize * 1.8f)));
                 if (!string.Equals(newApiKey, apiKey, StringComparison.Ordinal))
                 {
                     apiKey = newApiKey ?? string.Empty;
@@ -276,35 +278,51 @@ namespace COTL_AL_NPCs
             DrawTextField("Model", ref draft.Model, fieldStyle, labelStyle);
             GUILayout.Label("Advanced/manual field. If you do not know what works, use Find, Test & Save Setup instead of guessing.", labelStyle);
 
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button(autoFindingModel ? "Finding..." : "Find, Test & Save Setup", buttonStyle, GUILayout.Width(390f), GUILayout.Height(56f)))
-                StartFindAndSaveWorkingModel();
-            if (GUILayout.Button(fetchingModels ? "Fetching..." : "Fetch Models", buttonStyle, GUILayout.Width(190f), GUILayout.Height(56f)))
-                StartFetchModels(false);
-            if (GUILayout.Button(testingModel ? "Testing..." : "Test Selected Model", buttonStyle, GUILayout.Width(270f), GUILayout.Height(56f)))
-                StartTestSelectedModel(saveWhenPassed: false);
-            if (fetchedModels.Length > 0)
-                GUILayout.Label($"{fetchedModels.Length} available model(s)", labelStyle, GUILayout.Height(56f));
-            GUILayout.EndHorizontal();
+            if (Screen.width < 1000)
+            {
+                if (GUILayout.Button(autoFindingModel ? "Finding..." : "Find, Test & Save Setup", buttonStyle, GUILayout.Height(buttonHeight)))
+                    StartFindAndSaveWorkingModel();
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button(fetchingModels ? "Fetching..." : "Fetch Models", buttonStyle, GUILayout.Height(buttonHeight)))
+                    StartFetchModels(false);
+                if (GUILayout.Button(testingModel ? "Testing..." : "Test Selected Model", buttonStyle, GUILayout.Height(buttonHeight)))
+                    StartTestSelectedModel(saveWhenPassed: false);
+                GUILayout.EndHorizontal();
+                if (fetchedModels.Length > 0)
+                    GUILayout.Label($"{fetchedModels.Length} available model(s)", labelStyle);
+            }
+            else
+            {
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button(autoFindingModel ? "Finding..." : "Find, Test & Save Setup", buttonStyle, GUILayout.Width(390f), GUILayout.Height(buttonHeight)))
+                    StartFindAndSaveWorkingModel();
+                if (GUILayout.Button(fetchingModels ? "Fetching..." : "Fetch Models", buttonStyle, GUILayout.Width(190f), GUILayout.Height(buttonHeight)))
+                    StartFetchModels(false);
+                if (GUILayout.Button(testingModel ? "Testing..." : "Test Selected Model", buttonStyle, GUILayout.Width(270f), GUILayout.Height(buttonHeight)))
+                    StartTestSelectedModel(saveWhenPassed: false);
+                if (fetchedModels.Length > 0)
+                    GUILayout.Label($"{fetchedModels.Length} available model(s)", labelStyle, GUILayout.Height(buttonHeight));
+                GUILayout.EndHorizontal();
+            }
 
             DrawFetchedModelPicker(buttonStyle, labelStyle);
 
             GUILayout.Space(10f);
             GUILayout.Label("Timeout seconds", labelStyle);
-            var timeoutText = GUILayout.TextField(draft.TimeoutSeconds.ToString(), fieldStyle, GUILayout.Width(160f), GUILayout.Height(42f));
+            var timeoutText = GUILayout.TextField(draft.TimeoutSeconds.ToString(), fieldStyle, GUILayout.Width(Mathf.Max(120f, fontSize * 6f)), GUILayout.Height(Mathf.Max(36f, fontSize * 1.8f)));
             if (int.TryParse(timeoutText, out var timeout))
                 draft.TimeoutSeconds = Mathf.Clamp(timeout, 10, 600);
 
             GUILayout.EndScrollView();
 
             GUILayout.Space(10f);
-            GUILayout.Box(status, statusStyle, GUILayout.ExpandWidth(true), GUILayout.Height(86f));
+            GUILayout.Box(status, statusStyle, GUILayout.ExpandWidth(true), GUILayout.Height(Mathf.Max(72f, fontSize * 4f)));
             GUILayout.Space(8f);
             GUILayout.BeginHorizontal();
             var submitLabel = setupSavedAwaitingSubmit ? "Submit" : "Find, Test & Save Setup";
-            if (GUILayout.Button(submitLabel, buttonStyle, GUILayout.Height(58f)))
+            if (GUILayout.Button(submitLabel, buttonStyle, GUILayout.Height(buttonHeight)))
                 Save();
-            if (GUILayout.Button("Reset", buttonStyle, GUILayout.Width(160f), GUILayout.Height(58f)))
+            if (GUILayout.Button("Reset", buttonStyle, GUILayout.Width(Mathf.Max(120f, fontSize * 6.5f)), GUILayout.Height(buttonHeight)))
                 Reset();
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();
@@ -312,11 +330,11 @@ namespace COTL_AL_NPCs
             GUI.DragWindow(new Rect(0f, 0f, 10000f, 36f));
         }
 
-        private static GUIStyle BuildStatusStyle()
+        private static GUIStyle BuildStatusStyle(int fontSize)
         {
             var style = new GUIStyle(GUI.skin.box)
             {
-                fontSize = 23,
+                fontSize = Mathf.Max(15, fontSize - 1),
                 fontStyle = FontStyle.Bold,
                 wordWrap = true,
                 alignment = TextAnchor.MiddleLeft,

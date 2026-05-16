@@ -1,4 +1,12 @@
-﻿# Changelog
+# Changelog
+
+## 0.1.6
+
+- Improved conversation UI scaling on smaller laptop screens.
+- Made Character Awareness controls wrap based on the conversation window width instead of using fixed rows.
+- Added a clickable Close button and Escape-key close support for keyboard/mouse conversation users.
+- Added Escape-key close support to the other blocking overlay menus.
+- Fixed the Cult About editor so longer text remains reachable in the scroll view.
 
 ## 0.1.5
 

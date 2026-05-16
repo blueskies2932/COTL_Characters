@@ -40,6 +40,7 @@ namespace COTL_AL_NPCs
             if (!visible)
                 return;
 
+            HandleKeyboardCloseShortcut();
             EnsureStyles();
             EnsureWindowRect();
             GUI.depth = -990;
@@ -50,11 +51,12 @@ namespace COTL_AL_NPCs
         private static void DrawWindow(int windowID)
         {
             scroll = GUILayout.BeginScrollView(scroll, GUILayout.ExpandHeight(true));
+            var textAreaHeight = GetAboutTextAreaHeight();
             draftText = GUILayout.TextArea(
                 draftText ?? string.Empty,
                 textAreaStyle,
-                GUILayout.MinHeight(Mathf.Max(360f, windowRect.height * 0.55f)),
-                GUILayout.ExpandHeight(true));
+                GUILayout.MinHeight(textAreaHeight),
+                GUILayout.ExpandWidth(true));
             GUILayout.EndScrollView();
 
             GUILayout.Space(12f);
@@ -133,9 +135,29 @@ namespace COTL_AL_NPCs
             windowRectInitialized = true;
         }
 
+        private static void HandleKeyboardCloseShortcut()
+        {
+            var ev = Event.current;
+            if (ev == null || ev.type != EventType.KeyDown || ev.keyCode != KeyCode.Escape)
+                return;
+
+            Hide();
+            ev.Use();
+        }
+
         private static int GetFontSize()
         {
-            return Mathf.Clamp(AICharacterPlugin.ConversationFontSize?.Value ?? 52, 32, 72);
+            return FollowerAiOverlayGui.GetScaledFontSize(22, 72);
+        }
+
+        private static float GetAboutTextAreaHeight()
+        {
+            var fontSize = GetFontSize();
+            var lineCount = 1;
+            if (!string.IsNullOrEmpty(draftText))
+                lineCount = Mathf.Max(1, draftText.Split('\n').Length);
+
+            return Mathf.Max(320f, windowRect.height * 0.72f, (lineCount + 4) * fontSize * 1.45f);
         }
     }
 }

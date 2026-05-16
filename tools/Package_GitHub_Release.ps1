@@ -291,7 +291,11 @@ $changelog = @"
 
 ## $($mod.version_number)
 
-- Fixed AI Provider Setup model validation so the pasted setup key is the key used during tests, instead of allowing an existing Windows environment variable to override it.
+- Improved conversation UI scaling on smaller laptop screens.
+- Made Character Awareness controls wrap based on the conversation window width instead of using fixed rows.
+- Added a clickable Close button and Escape-key close support for keyboard/mouse conversation users.
+- Added Escape-key close support to the other blocking overlay menus.
+- Fixed the Cult About editor so longer text remains reachable in the scroll view.
 "@
 Write-Utf8NoBom (Join-Path $releaseRoot "CHANGELOG.md") ($changelog + [Environment]::NewLine)
 
@@ -484,7 +488,11 @@ Bugfix release for Cult of the Lamb.
 
 ## Fixed
 
-- Fixed AI Provider Setup model validation so the pasted setup key is the key used during tests, instead of allowing an existing Windows environment variable to override it.
+- Improved conversation UI scaling on smaller laptop screens.
+- Made Character Awareness controls wrap based on the conversation window width instead of using fixed rows.
+- Added a clickable Close button and Escape-key close support for keyboard/mouse conversation users.
+- Added Escape-key close support to the other blocking overlay menus.
+- Fixed the Cult About editor so longer text remains reachable in the scroll view.
 
 ## Download
 

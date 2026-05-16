@@ -92,6 +92,7 @@ namespace COTL_AL_NPCs
                 return;
 
             FollowerAiOverlayInputBlocker.Show(InputBlockerOwner);
+            HandleKeyboardCloseShortcut();
             EnsureWindowRectInitialized();
             windowRect = GUI.ModalWindow(WindowID, windowRect, DrawWindow, "Fight Pit Tournament Ledger", windowStyle);
             FollowerAiOverlayInputBlocker.ConsumeImGuiPointerEvents();
@@ -723,7 +724,17 @@ namespace COTL_AL_NPCs
 
         private static int GetFontSize()
         {
-            return Mathf.Clamp(AICharacterPlugin.ConversationFontSize?.Value ?? 52, 24, 72);
+            return FollowerAiOverlayGui.GetScaledFontSize(18, 72);
+        }
+
+        private static void HandleKeyboardCloseShortcut()
+        {
+            var ev = Event.current;
+            if (ev == null || ev.type != EventType.KeyDown || ev.keyCode != KeyCode.Escape)
+                return;
+
+            Hide();
+            ev.Use();
         }
 
     }

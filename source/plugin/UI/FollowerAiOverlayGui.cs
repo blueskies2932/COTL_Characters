@@ -41,5 +41,13 @@ namespace COTL_AL_NPCs
             rect.y = Mathf.Clamp(rect.y, 0f, Mathf.Max(0f, Screen.height - rect.height));
             return rect;
         }
+
+        internal static int GetScaledFontSize(int minimum, int maximum)
+        {
+            var configured = Mathf.Clamp(AICharacterPlugin.ConversationFontSize?.Value ?? 52, 18, 96);
+            var scale = Mathf.Min(Screen.width / 1920f, Screen.height / 1080f);
+            scale = Mathf.Clamp(scale, 0.58f, 1f);
+            return Mathf.Clamp(Mathf.RoundToInt(configured * scale), minimum, maximum);
+        }
     }
 }

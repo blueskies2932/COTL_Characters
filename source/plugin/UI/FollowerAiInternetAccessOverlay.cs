@@ -48,6 +48,7 @@ namespace COTL_AL_NPCs
             if (!visible || !IsPauseScreenOpen())
                 return;
 
+            HandleKeyboardCloseShortcut();
             EnsureStyles();
             EnsureWindowRect();
             GUI.depth = -979;
@@ -201,13 +202,24 @@ namespace COTL_AL_NPCs
 
         private static int GetFontSize()
         {
-            return Mathf.Clamp(AICharacterPlugin.ConversationFontSize?.Value ?? 52, 28, 72);
+            return FollowerAiOverlayGui.GetScaledFontSize(20, 72);
         }
 
         private static void SetStatus(string message)
         {
             status = message ?? string.Empty;
             statusUntilRealtime = Time.realtimeSinceStartup + 3f;
+        }
+
+        private static void HandleKeyboardCloseShortcut()
+        {
+            var ev = Event.current;
+            if (ev == null || ev.type != EventType.KeyDown || ev.keyCode != KeyCode.Escape)
+                return;
+
+            SetVisible(false);
+            SetStatus("Internet access panel closed.");
+            ev.Use();
         }
     }
 }
